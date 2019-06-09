@@ -36,6 +36,8 @@ urlpatterns = [
          name='destorylikeit'),
     path('api/twits/<int:pk>/', views.TwitDetail,
          name='twitdetail'),
+    path('api/twits/<int:pk>/comments/', views.TwitCommentDetail,
+         name='twitcommentdetail'),
     path('api/comments/<int:pk>/', views.CommentDetail,
          name='commentdetail'),
 

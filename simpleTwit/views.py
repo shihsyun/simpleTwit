@@ -124,19 +124,11 @@ def TwitDetail(request, pk):
     if request.method == 'GET':
 
         try:
-            comment = Comment.objects.get(twit=twit)
-        except Comment.DoesNotExist:
-            return JsonResponse({'Twit': twit.content}, status=HTTP_200_OK)
-
-        try:
             twits = Twit.objects.filter(id=pk)
         except Twit.DoesNotExist:
             return Response({}, status=HTTP_400_BAD_REQUEST)
 
-        data = serializers.serialize('json', twits)
-        print(data)
-
-        return JsonResponse({'Twit': twit.content}, status=HTTP_200_OK)
+        return Response({serializers.serialize('json', twits)}, status=HTTP_200_OK)
 
     if request.method == 'DELETE':
         if twit.user_id == request.session['user_id']:
@@ -151,6 +143,23 @@ def TwitDetail(request, pk):
             return Response({}, status=HTTP_204_NO_CONTENT)
 
     return Response({}, status=HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@login_required()
+def TwitCommentDetail(request, pk):
+
+    try:
+        twit = Twit.objects.get(id=pk)
+    except Twit.DoesNotExist:
+        return Response({}, status=HTTP_400_BAD_REQUEST)
+
+    try:
+        comments = Comment.objects.filter(twit=twit)
+    except Comment.DoesNotExist:
+        return Response({}, status=HTTP_400_BAD_REQUEST)
+
+    return Response({serializers.serialize('json', comments)}, status=HTTP_200_OK)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
