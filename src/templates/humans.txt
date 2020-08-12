@@ -1,0 +1,1 @@
+SimpleTwit is a clone of Twitter, only for practice, please do not use commerical, thansk.
